@@ -16,8 +16,7 @@ function Home() {
     colorMode,
     Dashboard,
     adminAuthenticate,
-    setadminAuthenticate,
-    fetchStats,
+    setadminAuthenticate, 
   } = useContext(AdminContext);
 
   const navigate = useNavigate();
