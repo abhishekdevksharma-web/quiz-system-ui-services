@@ -42,10 +42,13 @@ function AdminState(props) {
 
   async function fetchUserAllQuizes() {
     try {
-      const response = await fetch("http://localhost:8000/admin/fetchallquiz", {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/fetchallquiz`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
       const data = await response.json();
 
       setadminQuizHistory(data);
@@ -63,7 +66,7 @@ function AdminState(props) {
       return;
     } else {
       try {
-        const response = await fetch("http://localhost:8000/admin/dashbord", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/dashbord`, {
           method: "GET",
           credentials: "include",
         });
@@ -82,7 +85,7 @@ function AdminState(props) {
 
   async function Dashboard() {
     try {
-      const response = await fetch("http://localhost:8000/admin/dashbord", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/dashbord`, {
         method: "GET",
         credentials: "include",
       });
@@ -96,7 +99,7 @@ function AdminState(props) {
 
   async function createQuestion(Question, UserQuizMeta) {
     try {
-      const response = await fetch("http://localhost:8000/admin/createquiz", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/createquiz`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -116,7 +119,7 @@ function AdminState(props) {
 
   async function createUser(UserData) {
     try {
-      const response = await fetch("http://localhost:8000/admin/createuser", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/createuser`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -133,7 +136,7 @@ function AdminState(props) {
 
   async function handleLogin(data) {
     try {
-      const response = await fetch("http://localhost:8000/admin/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -152,7 +155,7 @@ function AdminState(props) {
   async function handleUpdateStatus(query) {
     try {
       const response = await fetch(
-        "http://localhost:8000/admin/updatequizstatus",
+        `${import.meta.env.VITE_API_URL}/updatequizstatus`,
         {
           method: "PATCH",
           credentials: "include",
@@ -168,30 +171,21 @@ function AdminState(props) {
     } catch (error) {
       console.log(error);
     }
-  }
-  async function fetchStats() {
-    // try {
-    //   const response = await fetch("http://localhost:8000/admin/login", {
-    //     method: "GET",
-    //     credentials: "include",
-    //   });
-    //   const res = await response.json();
-    //   return res;
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }
+  } 
 
   async function FetchQuizStudentResults(data) {
     try {
-      const res = await fetch("http://localhost:8000/admin/quiz-responce-results", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/quiz-responce-results`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       const parseRes = await res.json();
       return parseRes;
