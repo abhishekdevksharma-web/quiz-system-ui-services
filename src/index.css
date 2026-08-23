@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mint-500: oklch(0.72 0.11 178);
+}
+@keyframes dropdown {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdown 0.2s ease-out forwards;
+}
+
+/* Default (Light Mode) */
+:root {
+  --scrollbar-thumb: rgba(128, 128, 128, 0.595);
+  --scrollbar-thumb-hover: white;
+  --scrollbar-track: rgb(2, 6, 24); /* gray-200 */
+}
+
+/* Dark Mode */
+.dark {
+  --scrollbar-thumb: #000000;
+  --scrollbar-thumb-hover: white;
+  --scrollbar-track: #ff0000;
+}
+
+/* Actual Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+@layer utilities {
+  .datetime-input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(1) brightness(1.3);
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+
+  .datetime-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+}
