@@ -119,7 +119,7 @@ function AdminState(props) {
 
   async function createUser(UserData) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/createuser`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/createuser`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -136,7 +136,7 @@ function AdminState(props) {
 
   async function handleLogin(data) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -155,7 +155,7 @@ function AdminState(props) {
   async function handleUpdateStatus(query) {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/updatequizstatus`,
+        `${import.meta.env.VITE_API_URL}/admin/updatequizstatus`,
         {
           method: "PATCH",
           credentials: "include",
@@ -176,7 +176,7 @@ function AdminState(props) {
   async function FetchQuizStudentResults(data) {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/quiz-responce-results`,
+        `${import.meta.env.VITE_API_URL}/admin/quiz-responce-results`,
         {
           method: "POST",
           credentials: "include",
