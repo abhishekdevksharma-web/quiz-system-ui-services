@@ -67,14 +67,7 @@ function Home() {
         setisfechedRecentQuiz(false);
         setIsFetchingStats(false);
       }
-    }
-
-    if (!document.cookie) {
-      navigate("/admin/login");
-    } else {
-      initialFetches();
-      setIsFetchingStats(false);
-    }
+    } 
   }, []);
   const spanClass = {
     1: "lg:col-span-1",
