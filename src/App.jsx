@@ -12,12 +12,30 @@ import AdminHome from "./components/adminComp/Dashbord_Route";
 import QuestionBuilder from "./QuizBuilder/QuizBuilder";
 import AdminQuizes from "./components/adminComp/AdminHistory_Route";
 
+import { handVerifyTokenApi } from "./services/auth.service";
+import { useContext, useEffect, useState } from "react";
+import AdminContext from "./context/adminContext/adminContext";
 function App() {
+  const { setIsAuthenticate, setuserDetails, setIsCheckingToken } =
+    useContext(AdminContext);
+  useEffect(() => {
+    async function handVerifyToken() {
+      const auth = await handVerifyTokenApi();
+      setIsAuthenticate(auth.success);
+      if (auth.success) {
+        setuserDetails({
+          name: auth.user.name,
+          email: auth.user.email,
+        }); 
+      }
+    }
+    handVerifyToken();
+  }, []);
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/student/:id" element={<Student />} /> 
+        <Route path="/student/:id" element={<Student />} />
         <Route path="/admin/*" element={<Admin />}>
           <Route index element={<AdminHome />} />
           <Route path="quizes" element={<AdminQuizes />} />

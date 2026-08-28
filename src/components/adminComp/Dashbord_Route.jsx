@@ -15,73 +15,48 @@ function Home() {
     setuserDetails,
     colorMode,
     Dashboard,
-    adminAuthenticate,
-    setadminAuthenticate, 
+    IsAuthenticate,
   } = useContext(AdminContext);
 
   const navigate = useNavigate();
 
   const [isfechedRecentQuiz, setisfechedRecentQuiz] = useState(false);
-  const [isFetchingStats, setIsFetchingStats] = useState(true);
+  const [isFetchingStats, setIsFetchingStats] = useState(false);
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
+    if (!IsAuthenticate) return;
     async function initialFetches() {
       try {
         setisfechedRecentQuiz(true);
 
-        const { user, loginStatus, activeQuizzes } = await Dashboard(); 
-        
+        const { user, activeQuizzes } = await Dashboard();
 
-        if (loginStatus) {
-          setadminAuthenticate(true);
+        setStats([
+          {
+            title: "Total Quizzes",
+            value: user.totalQuizs || 0,
+          },
+          {
+            title: "Active Quizzes",
+            value: activeQuizzes.length,
+          },
+        ]);
 
-          setStats([
-            {
-              title: "Total Quizzes",
-              value: user.totalQuizs || 0,
-              span: 1,
-            },
-            {
-              title: "Active Quizzes",
-              value: activeQuizzes.length,
-              option: activeQuizzes,
-              span: 2, // Ye 2 columns lega
-            },
-            {
-              title: "Quick Action",
-              value: "...",
-              span: 1,
-            },
-          ]);
+        setuserDetails({
+          name: user.name,
+          email: user.email,
+        });
 
-          setuserDetails({
-            name: user.name,
-            email: user.email,
-          });
-
-          setadminRecentQuizHistory(user.recentQuizzes);
-        } else navigate("/admin/login");
+        setadminRecentQuizHistory(user.recentQuizzes);
       } catch (error) {
       } finally {
         setisfechedRecentQuiz(false);
         setIsFetchingStats(false);
       }
     }
-
-    if (!document.cookie) {
-      navigate("/admin/login");
-    } else {
-      initialFetches();
-      setIsFetchingStats(false);
-    }
-  }, []);
-  const spanClass = {
-    1: "lg:col-span-1",
-    2: "lg:col-span-2",
-    3: "lg:col-span-3",
-    4: "lg:col-span-4",
-  };
+    initialFetches();
+  }, [IsAuthenticate]);
 
   return (
     <div
@@ -93,17 +68,14 @@ function Home() {
       }
     >
       <main className="mx-auto max-w-7xl px-6 py-8 space-y-6">
-        {/* Stats grid */}
-
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {(isFetchingStats ? new Array(4).fill({ span: 1 }) : stats).map(
             (item, i) => (
-              <div key={i} className={spanClass[item.span] || "lg:col-span-1"}>
+              <div key={i}>
                 <StatCard
                   colorMode={colorMode}
                   title={item.title}
                   value={item.value}
-                  options={item.option}
                 />
               </div>
             ),
@@ -115,9 +87,9 @@ function Home() {
           {/* Recent Quizzes */}
           <div
             className={
-              "lg:col-span-2 rounded-2xl transition-colors duration-300 border-2 " +
+              "lg:col-span-2 rounded-2xl transition-colors duration-300 border-2 h-fit " +
               (colorMode
-                ? "bg-slate-900 border border-slate-800 shadow-sm"
+                ? "bg-slate-900 border-slate-800 shadow-sm"
                 : "bg-white border border-slate-200 shadow-sm")
             }
           >
@@ -145,7 +117,12 @@ function Home() {
               </span>
             </div>
 
-            <div className="space-y-3 px-5 py-5 rounded-b-xl">
+            <div
+              className={
+                "space-y-3 px-5 py-5 rounded-b-xl " +
+                (colorMode ? "bg-slate-950 " : "bg-white ")
+              }
+            >
               {!isfechedRecentQuiz ? (
                 adminRecentQuizHistory.length > 0 ? (
                   adminRecentQuizHistory.map((quiz, index) => (
@@ -153,7 +130,8 @@ function Home() {
                       key={quiz._id || index}
                       className={`flex items-center justify-between rounded-xl px-4 py-3 transition cursor-pointer group h-14 min-h-14 ${
                         colorMode
-                          ? "bg-slate-900 hover:bg-slate-800/80 border border-slate-800 hover:border-slate-700"
+                          ? `bg-slate-900 
+                          ${quiz.status === "Open" ? "hover:border-green-500/20 hover:bg-green-300/20" : "hover:bg-red-400/20"}  border border-slate-800 `
                           : "bg-white hover:bg-slate-50 border border-slate-100 shadow-xs"
                       }`}
                     >
@@ -272,10 +250,10 @@ function Home() {
                       {/* Right Section: Status Badge (Professional Look) */}
                       <span
                         className={`ml-4 shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide border ${
-                          quiz.status === "Active"
+                          quiz.status === "Open"
                             ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                            : quiz.status === "Scheduled"
-                              ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            : quiz.status === "Closed"
+                              ? "bg-rose-500/20 text-rose-500 border-amber-500/20"
                               : quiz.status === "Draft"
                                 ? "bg-sky-500/10 text-sky-400 border-sky-500/20"
                                 : colorMode

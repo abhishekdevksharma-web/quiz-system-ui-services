@@ -3,7 +3,7 @@ import AdminContext from "../context/adminContext/adminContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { colorMode, handleLogin, setadminAuthenticate } =
+  const { colorMode, handleLogin, setIsAuthenticate, IsAuthenticate } =
     useContext(AdminContext);
 
   const navigate = useNavigate();
@@ -27,10 +27,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
-    const responce = await handleLogin(formData); 
-    
+    const responce = await handleLogin(formData);
+
     if (responce.status == true) {
-      setadminAuthenticate(responce.status);
+      setIsAuthenticate(responce.status);
       setStatus("success");
       setAlert({
         type: "success",
@@ -48,6 +48,7 @@ const Login = () => {
       });
     }
   };
+
 
   return (
     <div
@@ -208,7 +209,15 @@ const Login = () => {
             )}
           </button>
         </form>
-
+        <span className="block text-center text-sm text-gray-500 mt-5">
+          Don't have an account?{" "}
+          <span
+            onClick={() => navigate("/admin/signup", { replace: true })}
+            className="ml-1 font-semibold text-blue-600 cursor-pointer hover:text-blue-700 hover:underline transition-colors"
+          >
+            Sign Up
+          </span>
+        </span>
         {/* Footer */}
         <div
           className={

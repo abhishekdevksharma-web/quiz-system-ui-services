@@ -1,8 +1,8 @@
 import { Clock3, CalendarClock } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
-import AdminContext from "../../context/adminContext/adminContext";
+import { useContext, useEffect, useState } from "react"; 
 import DurationModal from "./DurationModal";
 import ScheduledModal from "./ScheduledModal";
+import AdminContext from "../../../context/adminContext/adminContext";
 
 function QuizTiming({ onChange }) {
   const { colorMode, quizMeta, setQuizMeta } = useContext(AdminContext);

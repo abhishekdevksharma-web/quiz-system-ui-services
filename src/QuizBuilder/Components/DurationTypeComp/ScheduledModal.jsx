@@ -9,8 +9,7 @@ function DurationModal({
   startTime,
   endTime,
   setIsOpenScheduleModal,
-}) {
-  console.log(startTime);
+}) { 
 
   return (
     <div

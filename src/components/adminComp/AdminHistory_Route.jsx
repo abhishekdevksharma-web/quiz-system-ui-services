@@ -2,29 +2,30 @@ import React, { useEffect, useState, useContext } from "react";
 import Navbar from "./Navbar";
 import AdminContext from "../../context/adminContext/adminContext";
 import QuizHistoryCard from "../components/AdminQuizHistory_Card";
+import QuizHistoryContext from "../../context/quizHistoryContext/quizHistoryContext";
 
 const AdminQuizHistory = () => {
-  const {
-    colorMode,
-    onViewScores,
-    fetchUserAllQuizes,
-    adminAuthenticate,
-    setadminAuthenticate,
-  } = useContext(AdminContext);
+  const { colorMode, onViewScores, fetchUserAllQuizes, IsAuthenticate } =
+    useContext(AdminContext);
 
-  const [quizzes, setQuizzes] = useState([]);
+  const {quizzes, setQuizzes} = useContext(QuizHistoryContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!IsAuthenticate) return;
     async function fetchAllQuizes() {
       setLoading(true);
       const QuizData = await fetchUserAllQuizes();
-      setadminAuthenticate(true);
-      setQuizzes(QuizData);
+      console.log(QuizData);
+      QuizData.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+      setQuizzes(QuizData || []);
       setLoading(false);
     }
+
     fetchAllQuizes();
-  }, []);
+  }, [IsAuthenticate]);
 
   return (
     <main

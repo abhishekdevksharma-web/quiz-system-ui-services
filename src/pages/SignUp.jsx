@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import AdminContext from "../context/adminContext/adminContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, replace, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const { colorMode, createUser } = useContext(AdminContext);
@@ -127,8 +127,8 @@ const SignUp = () => {
                   ? "bg-emerald-900/30 border-emerald-700 text-emerald-300"
                   : "bg-emerald-50 border-emerald-200 text-emerald-700"
                 : colorMode
-                ? "bg-red-900/30 border-red-700 text-red-300"
-                : "bg-red-50 border-red-200 text-red-700")
+                  ? "bg-red-900/30 border-red-700 text-red-300"
+                  : "bg-red-50 border-red-200 text-red-700")
             }
           >
             {alert.message}
@@ -289,15 +289,15 @@ const SignUp = () => {
           }
         >
           Already have an account?{" "}
-          <Link
-            to="/admin/login"
+          <span
+            onClick={() => navigate("/admin/login", { replace: true })}
             className={
               "font-medium cursor-pointer hover:underline " +
               (colorMode ? "text-indigo-400" : "text-indigo-600")
             }
           >
             Login
-          </Link>
+          </span>
         </div>
       </div>
     </div>

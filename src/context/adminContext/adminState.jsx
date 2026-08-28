@@ -28,7 +28,15 @@ function AdminState(props) {
       startTime: "",
       endTime: "",
     },
-
+    userTimeLimit: 0,
+    securityCheckType: {
+      autoSubmitOnNewTab: false,
+      autoSubmitOnChromeClose: false,
+      autoSubmitOnOtherApp: false,
+      autoSubmitOnMinimize: false,
+      fullscreenRequired: false,
+      ignoreResize: true,
+    },
     totalQuestions: 0,
     status: "Closed",
     attempts: 0,
@@ -38,7 +46,8 @@ function AdminState(props) {
   const [colorMode, setcolorMode] = useState(true);
 
   //admin auth
-  const [adminAuthenticate, setadminAuthenticate] = useState(false);
+  const [IsAuthenticate, setIsAuthenticate] = useState(false);
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   async function fetchUserAllQuizes() {
     try {
@@ -66,10 +75,13 @@ function AdminState(props) {
       return;
     } else {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/dashbord`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/admin/dashbord`,
+          {
+            method: "GET",
+            credentials: "include",
+          },
+        );
         const data = await response.json();
 
         setadminRecentQuizHistory(data);
@@ -85,32 +97,15 @@ function AdminState(props) {
 
   async function Dashboard() {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/dashbord`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function createQuestion(Question, UserQuizMeta) {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/createquiz`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/dashbord`,
+        {
+          method: "GET",
+          credentials: "include",
         },
-        body: JSON.stringify({
-          ...UserQuizMeta,
-          questions: Question,
-        }),
-      });
+      );
       const data = await response.json();
+
       return data;
     } catch (error) {
       console.log(error);
@@ -119,14 +114,17 @@ function AdminState(props) {
 
   async function createUser(UserData) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/createuser`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/createuser`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(UserData),
         },
-        body: JSON.stringify(UserData),
-      });
+      );
 
       return true;
     } catch (error) {
@@ -136,14 +134,17 @@ function AdminState(props) {
 
   async function handleLogin(data) {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       const res = await response.json();
       return res;
@@ -171,7 +172,7 @@ function AdminState(props) {
     } catch (error) {
       console.log(error);
     }
-  } 
+  }
 
   async function FetchQuizStudentResults(data) {
     try {
@@ -203,21 +204,22 @@ function AdminState(props) {
         setadminQuizHistory,
         colorMode,
         setcolorMode,
-        createQuestion,
         createUser,
-        adminAuthenticate,
-        setadminAuthenticate,
+        IsAuthenticate,
+        setIsAuthenticate,
         handleLogin,
         userDetails,
         setuserDetails,
         fetchUserAllQuizes,
         quizMeta,
-        setQuizMeta, 
+        setQuizMeta,
         adminRecentQuizHistory,
         setadminRecentQuizHistory,
         Dashboard,
         handleUpdateStatus,
         FetchQuizStudentResults,
+        isCheckingToken,
+        setIsCheckingToken,
       }}
     >
       {props.children}

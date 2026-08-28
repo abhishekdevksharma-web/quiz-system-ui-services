@@ -7,29 +7,56 @@ function TitleField() {
 
   return (
     <div
-      className={`flex flex-1 items-center h-9 rounded-lg border px-3 gap-2 text-sm transition-all
-      ${
-        colorMode
-          ? "bg-slate-900 border-slate-700 text-slate-100 focus-within:border-indigo-500"
-          : "bg-white border-slate-300 text-slate-900 focus-within:border-indigo-500"
-      }`}
+      className={`
+        group flex items-center h-10 rounded-xl border px-3 gap-2.5
+        text-sm transition-all duration-200
+        shadow-sm
+        ${
+          colorMode
+            ? `
+              bg-slate-900/90
+              border-slate-700
+              text-slate-100
+              hover:border-slate-600
+              focus-within:border-indigo-500
+              focus-within:ring-2
+              focus-within:ring-indigo-500/10
+            `
+            : `
+              bg-white
+              border-slate-200
+              text-slate-900
+              hover:border-slate-300
+              focus-within:border-indigo-500
+              focus-within:ring-2
+              focus-within:ring-indigo-500/10
+            `
+        }
+      `}
     >
-      <FileText
-        size={16}
-        className={colorMode ? "text-slate-400" : "text-slate-500"}
-      />
-
-      {/* <span
-        className={`text-xs font-medium ${
-          colorMode ? "text-slate-400" : "text-slate-500"
-        }`}
+      {/* File Icon */}
+      <div
+        className={`
+          flex items-center justify-center shrink-0
+          w-6 h-6 rounded-md
+          ${
+            colorMode
+              ? "bg-slate-800 text-slate-400"
+              : "bg-slate-100 text-slate-500"
+          }
+        `}
       >
-        Title
-      </span> */}
+        <FileText size={14} strokeWidth={2} />
+      </div>
 
       {/* Divider */}
-      <span className="mx-1 text-slate-400">|</span>
+      <span
+        className={`h-5 w-px ${
+          colorMode ? "bg-slate-700" : "bg-slate-200"
+        }`}
+      />
 
+      {/* Input */}
       <input
         required
         type="text"
@@ -40,14 +67,33 @@ function TitleField() {
             title: e.target.value,
           }))
         }
-        placeholder="Quiz Title"
-        className="w-30 bg-transparent outline-none text-sm placeholder:text-slate-400"
+        placeholder="Quiz title"
+        className={`
+          min-w-0 flex-1 bg-transparent outline-none
+          text-sm font-medium
+          ${
+            colorMode
+              ? "text-slate-100 placeholder:text-slate-500"
+              : "text-slate-800 placeholder:text-slate-400"
+          }
+        `}
       />
 
-      <Pencil
-        size={14}
-        className={colorMode ? "text-slate-400" : "text-slate-500"}
-      />
+      {/* Edit Icon */}
+      <div
+        className={`
+          flex items-center justify-center shrink-0
+          w-6 h-6 rounded-md transition-all duration-200
+          group-focus-within:text-indigo-500
+          ${
+            colorMode
+              ? "text-slate-500 group-hover:bg-slate-800"
+              : "text-slate-400 group-hover:bg-slate-100"
+          }
+        `}
+      >
+        <Pencil size={13} strokeWidth={2} />
+      </div>
     </div>
   );
 }

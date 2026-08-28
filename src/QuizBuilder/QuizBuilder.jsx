@@ -9,52 +9,72 @@ import AdminContext from "../context/adminContext/adminContext";
 import QuesCard from "../components/adminComp/QuestionCard";
 import { X } from "lucide-react";
 import QuizModal from "../components/adminComp/QuizModal";
-import QuizTiming from "./DurationTypeComp/QuizTimingSelector";
+import QuizTiming from "./Components/DurationTypeComp/QuizTimingSelector";
+import { handleCreateQuizApi } from "../services/quiz.service";
+import IndexModal from "./Components/QuizSettings/IndexModal";
+import AlertModal from "./Components/AlertModal";
 
 export default function QuizBuilderNavbarPage() {
-  const {
-    colorMode,
-    question,
-    quizMeta,
-    setQuizMeta,
-    createQuestion,
-    setQuestion,
-  } = useContext(AdminContext);
+  const { colorMode, question, quizMeta, setQuizMeta, setQuestion } =
+    useContext(AdminContext);
 
   const [quesCardCount, setquesCardCount] = useState([1]);
   const [open, setOpen] = useState(false);
   const [ModalOpen, setModalOpen] = useState(false);
-  const [step, setStep] = useState(0);
-  const [shereLink, setShereLink] = useState("");
+  const [createQuizResData, setCreateQuizResData] = useState("");
+
+  //quiz create state
+  const [createQuizLoading, setCreateQuizLoading] = useState(false);
+  const [showAlertModal, setshowAlertModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+  });
+  const [settingModalOpen, setSettingModalOpen] = useState(false);
 
   function addQuesCard() {
     setquesCardCount((prev) => [...prev, prev.length + 1]);
   }
 
   function checkAllInputFill() {
-    if (!quizMeta.title || !quizMeta.subject) {
-      alert("please fill all the field");
+    const emptyFields = [];
+
+    if (!quizMeta.title?.trim()) {
+      emptyFields.push("Title");
+    }
+
+    if (!quizMeta.subject?.trim()) {
+      emptyFields.push("Subject");
+    }
+
+    if (emptyFields.length > 0) {
+      setshowAlertModal({
+        title: `Fields ${emptyFields.join(" & ")} Incomplete`,
+        isOpen: true,
+        message: "Please fill in all required fields before continuing.",
+      });
+
       return false;
-    } else return true;
+    }
+
+    return true;
   }
 
   async function handleSubmit() {
+    setSettingModalOpen(false);
     if (!checkAllInputFill()) return;
 
     setModalOpen(true);
-
-    console.log({ question, quizMeta });
-    setStep(0);
+    setCreateQuizLoading(true);
     try {
-      setStep(1);
-
-      const res = await createQuestion(question, quizMeta);
-      setStep(2);
-
-      setShereLink(res.data);
+      const res = await handleCreateQuizApi(question, quizMeta);
+      setCreateQuizResData(res);
     } catch (err) {
-      setStep(3);
+      console.error("Create question error:", err);
     } finally {
+      setTimeout(() => {
+        setCreateQuizLoading(false);
+      }, 1000);
     }
   }
 
@@ -160,14 +180,13 @@ export default function QuizBuilderNavbarPage() {
         >
           <div className="flex flex-col gap-2 ">
             <button
-              onClick={handleSubmit}
+              onClick={() => setSettingModalOpen(!settingModalOpen)}
               className="px-4 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-500 cursor-pointer"
             >
               Publish
             </button>
             <div className="space-y-5">
               {screenWidth <= 1449 && <StatusField />}
-              {screenWidth <= 1229 && <TagField />}
               {screenWidth <= 1029 && <DifficultyField />}
             </div>
           </div>
@@ -195,16 +214,74 @@ export default function QuizBuilderNavbarPage() {
           </div>
         </div>
 
+        {settingModalOpen ? (
+          <div
+            className={
+              "h-full w-full fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50 box-border "
+            }
+          >
+            <IndexModal
+              onClose={() => setSettingModalOpen(!settingModalOpen)}
+              handleSubmit={handleSubmit}
+            />
+          </div>
+        ) : (
+          ""
+        )}
         {/* Pushlish lodder modal */}
-        <div className="flex items-center justify-center h-screen">
-          <QuizModal
-            isOpen={ModalOpen}
-            step={step}
-            setModalOpen={setModalOpen}
-            retry={handleSubmit}
-            data={shereLink}
-          />
-        </div>
+
+        {ModalOpen ? (
+          <div
+            className={
+              "h-full w-full fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50 box-border "
+            }
+          >
+            <>
+              {createQuizLoading ? (
+                <div
+                  className={`flex justify-center items-center gap-1 w-[90%] sm:w-[80%] md:w-[500px] rounded-2xl shadow-xl p-6 text-center ${
+                    colorMode
+                      ? "bg-slate-800 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></span>
+                  <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:150ms]"></span>
+                  <span className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:300ms]"></span>
+                </div>
+              ) : (
+                <QuizModal
+                  isOpen={ModalOpen}
+                  setModalOpen={setModalOpen}
+                  retry={handleSubmit}
+                  data={createQuizResData}
+                />
+              )}
+            </>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* Alert modal */}
+        {showAlertModal.isOpen ? (
+          <div
+            className={
+              "h-full w-full fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50 box-border "
+            }
+          >
+            <AlertModal
+              isOpen={showAlertModal.isOpen}
+              title={showAlertModal.title}
+              message={showAlertModal.message}
+              buttonText="Okay"
+              onClose={() =>
+                setshowAlertModal((prev) => ({ ...prev, isOpen: false }))
+              }
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
