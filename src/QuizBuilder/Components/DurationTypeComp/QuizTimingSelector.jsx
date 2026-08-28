@@ -30,14 +30,7 @@ function QuizTiming({ onChange }) {
   const [endTime, setEndTime] = useState(
     quizMeta.timing.endTime || getTodayAtMidnight(),
   );
-
-  // useEffect(() => {
-  //   console.log('run');
-
-  //   if (new Date(startTime) > new Date(endTime)) {
-  //     setEndTime(startTime);
-  //   }
-  // }, [startTime, endTime]);
+ 
 
   const handleSaveSchedule = () => {
     if (!startTime || !endTime) {

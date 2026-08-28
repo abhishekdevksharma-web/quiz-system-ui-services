@@ -15,8 +15,7 @@ const AdminQuizHistory = () => {
     if (!IsAuthenticate) return;
     async function fetchAllQuizes() {
       setLoading(true);
-      const QuizData = await fetchUserAllQuizes();
-      console.log(QuizData);
+      const QuizData = await fetchUserAllQuizes(); 
       QuizData.sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
