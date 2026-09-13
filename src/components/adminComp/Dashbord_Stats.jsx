@@ -1,5 +1,5 @@
- 
-export default function StatCard({ colorMode, title, value, subtitle }) {
+export default function StatCard({ colorMode, data, subtitle }) { 
+  
   return (
     <div className="flex gap-5">
       <div
@@ -17,17 +17,17 @@ export default function StatCard({ colorMode, title, value, subtitle }) {
               colorMode ? "text-slate-400" : "text-slate-500"
             }`}
           >
-            {title}
+            {data.title}
           </p>
 
           {/* Center */}
           <div className="flex flex-1 flex-col justify-center">
             <h2
-              className={`text-5xl font-bold ${title === "Active Quizzes" ? "text-green-400" : ""} ${
+              className={`text-5xl font-bold ${data.title === "Active Quizzes" ? "text-green-400" : ""} ${
                 colorMode ? "" : "text-slate-900"
               }`}
             >
-              {value}
+              {data.value}
             </h2>
 
             {subtitle && (

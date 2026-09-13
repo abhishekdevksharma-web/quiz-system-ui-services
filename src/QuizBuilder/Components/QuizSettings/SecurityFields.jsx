@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { ExternalLink, XCircle, AppWindow, Maximize } from "lucide-react"; 
+import React, { useContext, useState } from "react";
+import { ExternalLink, XCircle, AppWindow, Maximize } from "lucide-react";
+import AdminContext from "../../../context/adminContext/adminContext";
 
-function SecurityFields({ colorMode, data, onChange }) { 
+function SecurityFields({ colorMode, data, onChange }) {
+  const { quizMeta, setQuizMeta } = useContext(AdminContext);
+
   const fields = [
     {
       key: "autoSubmitOnNewTab",
@@ -39,14 +42,7 @@ function SecurityFields({ colorMode, data, onChange }) {
         "Allow the quiz to work only while fullscreen mode is active.",
       icon: Maximize,
       color: "violet",
-    },
-    {
-      key: "ignoreResize",
-      title: "Ignore Window Resize",
-      description: "Window resizing will not be treated as a quiz violation.",
-      icon: AppWindow,
-      color: "gray",
-    },
+    }, 
   ];
 
   const getColorClasses = (color) => {
@@ -67,10 +63,7 @@ function SecurityFields({ colorMode, data, onChange }) {
 
       violet: colorMode
         ? "bg-violet-500/10 text-violet-400"
-        : "bg-violet-50 text-violet-600",
-      gray: colorMode
-        ? "bg-slate-500/10 text-slate-400"
-        : "bg-slate-100 text-slate-600",
+        : "bg-violet-50 text-violet-600", 
     };
 
     return colors[color];

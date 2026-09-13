@@ -1,51 +1,54 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 
 import Admin from "./pages/Admin";
-import Student from "./pages/Student";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 
 import AdminHome from "./components/adminComp/Dashbord_Route";
-
 import QuestionBuilder from "./QuizBuilder/QuizBuilder";
 import AdminQuizes from "./components/adminComp/AdminHistory_Route";
+import QuizLinkRoute from "./studentComp/QuizLinkRoute";
 
-import { handVerifyTokenApi } from "./services/auth.service";
-import { useContext, useEffect, useState } from "react";
-import AdminContext from "./context/adminContext/adminContext";
+import CreatorProtectedRoute from "./services/CreatorProtectedRoute";
+import StudnetProtectedRoute from "./services/StudnetProtectedRoute";
+import Studenthome from "./pages/Stundenthome";
+import StartQuizRoute from "./studentComp/Ques-Components/StartQuizRoute";
+import QuestionSection from "./studentComp/Ques-Components/QuestionSection";
+import NotFound from "./pages/NotFound";
+import StudentQuizHistory from "./studentComp/quizHistory/StudentQuizHistoryRoute";
+import StudentLayout from "./studentComp/StudentLayout";
+
 function App() {
-  const { setIsAuthenticate, setuserDetails, setIsCheckingToken } =
-    useContext(AdminContext);
-  useEffect(() => {
-    async function handVerifyToken() {
-      const auth = await handVerifyTokenApi();
-      setIsAuthenticate(auth.success);
-      if (auth.success) {
-        setuserDetails({
-          name: auth.user.name,
-          email: auth.user.email,
-        }); 
-      }
-    }
-    handVerifyToken();
-  }, []);
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/student/:id" element={<Student />} />
-        <Route path="/admin/*" element={<Admin />}>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/student/:quizId" element={<QuizLinkRoute />} />
+      <Route path="/student/start-quiz/:quizId" element={<StartQuizRoute />}>
+        <Route index element={<QuestionSection />} />
+      </Route>
+
+      <Route element={<StudnetProtectedRoute />}>
+        <Route element={<StudentLayout />}>
+          <Route path="/student" element={<Studenthome />} />
+          <Route path="/student/quizzes" element={<StudentQuizHistory />} />
+        </Route>
+      </Route>
+
+      <Route path="/" element={<Admin />}>
+        <Route element={<CreatorProtectedRoute />}>
           <Route index element={<AdminHome />} />
           <Route path="quizes" element={<AdminQuizes />} />
           <Route path="about" element={<About />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="questionbilder" element={<QuestionBuilder />} />
         </Route>
-      </Routes>
-    </>
+      </Route>
+      <Route element={<CreatorProtectedRoute />}>
+        <Route path="/questionbilder" element={<QuestionBuilder />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 

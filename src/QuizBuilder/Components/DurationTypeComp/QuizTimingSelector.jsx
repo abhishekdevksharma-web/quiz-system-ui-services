@@ -1,5 +1,5 @@
 import { Clock3, CalendarClock } from "lucide-react";
-import { useContext, useEffect, useState } from "react"; 
+import { useContext, useEffect, useState } from "react";
 import DurationModal from "./DurationModal";
 import ScheduledModal from "./ScheduledModal";
 import AdminContext from "../../../context/adminContext/adminContext";
@@ -30,7 +30,6 @@ function QuizTiming({ onChange }) {
   const [endTime, setEndTime] = useState(
     quizMeta.timing.endTime || getTodayAtMidnight(),
   );
- 
 
   const handleSaveSchedule = () => {
     if (!startTime || !endTime) {
@@ -109,7 +108,7 @@ function QuizTiming({ onChange }) {
             setIsOpenDurationModal((prev) => !prev);
             setIsOpenScheduleModal(false);
           }}
-          className={`flex h-7 items-center gap-2 rounded-md px-3 text-sm font-medium transition-all ${
+          className={`flex min-w-20 w-full h-7 items-center gap-2 rounded-md px-3 text-sm font-medium transition-all ${
             quizMeta.timing.type === "Duration"
               ? colorMode
                 ? "bg-slate-700 text-green-400"

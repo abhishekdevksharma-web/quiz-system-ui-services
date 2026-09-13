@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 export default function QuizModal({ isOpen, setModalOpen, data }) {
   const { colorMode } = useContext(AdminContext);
   const { _id, success } = data;
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [copied, setCopied] = useState(false);
   // Hooks ke BAAD conditional return
   if (!isOpen) return null;
 
-  const code = `${import.meta.env.VITE_APP_URL}/student/${_id}`;
+  const code = `${import.meta.env.VITE_QUIZ_REDIRECT_URL}/${_id}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
@@ -34,30 +34,39 @@ export default function QuizModal({ isOpen, setModalOpen, data }) {
         {data.message === "User not found" ||
         data.message === "Authentication required" ? (
           <>
-            <CircleAlert size={48} className="mx-auto mb-4 text-yellow-500" />
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow-500/10">
+              <CircleAlert
+                size={34}
+                strokeWidth={1.8}
+                className="text-yellow-500"
+              />
+            </div>
 
-            <h2 className="text-xl font-semibold mb-2">
-              Please Login or Create an Account
+            <h2 className="mb-2 text-center text-xl font-semibold tracking-tight">
+              Login Required
             </h2>
 
-            <p className="text-sm opacity-70 mb-6">
-              Please login or create an account to continue. Don't worry, your
-              quiz data has been pre-saved and will be preserved.
+            <p className="mx-auto mb-7 max-w-sm text-center text-sm leading-6 opacity-65">
+              Please login or create an account to continue your quiz.
+              <br />
+              <span className="opacity-90">
+                Your quiz progress has been safely saved.
+              </span>
             </p>
 
             <div className="flex items-center justify-center gap-3">
               <button
                 type="button"
-                onClick={() => navigate("/admin/login")}
-                className="h-9 px-5 rounded-lg bg-indigo-600 text-xs font-semibold text-white transition-all duration-200 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/25 active:translate-y-0"
+                onClick={() => navigate("/login")}
+                className="h-10 rounded-xl bg-indigo-600 px-6 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-500/25 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               >
                 Login
               </button>
 
               <button
                 type="button"
-                onClick={() => navigate("/admin/signup")}
-                className="h-9 px-5 rounded-lg bg-purple-600 text-xs font-semibold text-white transition-all duration-200 hover:bg-purple-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-purple-500/25 active:translate-y-0"
+                onClick={() => navigate("/signup")}
+                className="h-10 rounded-xl bg-purple-600 px-6 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-purple-700 hover:shadow-lg hover:shadow-purple-500/25 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-purple-500/40"
               >
                 Create Account
               </button>

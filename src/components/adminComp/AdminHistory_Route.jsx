@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import Navbar from "./Navbar";
+import React, { useEffect, useState, useContext } from "react"; 
 import AdminContext from "../../context/adminContext/adminContext";
 import QuizHistoryCard from "../components/AdminQuizHistory_Card";
 import QuizHistoryContext from "../../context/quizHistoryContext/quizHistoryContext";
@@ -8,14 +7,14 @@ const AdminQuizHistory = () => {
   const { colorMode, onViewScores, fetchUserAllQuizes, IsAuthenticate } =
     useContext(AdminContext);
 
-  const {quizzes, setQuizzes} = useContext(QuizHistoryContext);
+  const { quizzes, setQuizzes } = useContext(QuizHistoryContext);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!IsAuthenticate) return;
     async function fetchAllQuizes() {
       setLoading(true);
-      const QuizData = await fetchUserAllQuizes(); 
+      const QuizData = await fetchUserAllQuizes();
       QuizData.sort((a, b) => {
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
@@ -29,7 +28,7 @@ const AdminQuizHistory = () => {
   return (
     <main
       className={
-        "h-screen w-screen overflow-y-auto sm:px-6 sm:py-8 space-y-6 transition " +
+        "h-screen w-full min-w-0 overflow-y-auto overflow-x-hidden sm:px-6 sm:py-8 space-y-6 transition " +
         (colorMode
           ? "bg-slate-900 text-slate-100"
           : "bg-slate-100 text-slate-900")
@@ -116,7 +115,7 @@ const AdminQuizHistory = () => {
 
       {/* Quiz Cards */}
       {!loading && (
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 pt-16 px-10 pb-10">
+        <section className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3 px-10 pb-10">
           {quizzes.map((quiz) => (
             <QuizHistoryCard
               key={quiz._id}

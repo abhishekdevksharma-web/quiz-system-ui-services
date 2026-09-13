@@ -1,13 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  X,
+import { 
   Search,
   Download,
   FileText,
   FileImage,
-  FileSpreadsheet,
-  BarChart3,
-  Clock3,
+  FileSpreadsheet, 
 } from "lucide-react";
 import AdminContext from "../../../context/adminContext/adminContext";
 
@@ -18,7 +15,7 @@ const ResultsTab = ({ colorMode, quiz }) => {
 
   useEffect(() => {
     async function initial() {
-      const res = await FetchQuizStudentResults({ quizId: quiz._id });
+      const res = await FetchQuizStudentResults({ quizId: quiz._id }); 
 
       const studentList = res.students.map((item) => ({
         name: item.student.name,
@@ -26,9 +23,10 @@ const ResultsTab = ({ colorMode, quiz }) => {
         rollNo: item.student.roll,
         section: item.student.section,
         semester: item.student.semester,
-        score: item.obtainMarks,
-        totalMarks: item.totalMarks,
-        percentage: (item.obtainMarks / item.totalMarks) * 100,
+        obtainMarks: item.obtainMarks,
+        totalMarks: item.quizTotalMarks,
+        percentage: item.percentage,
+        status: "Passed",
         submittedInSec: item.quizDuration - item.submittedInSec / 60,
       }));
 
@@ -291,7 +289,7 @@ const ResultsTab = ({ colorMode, quiz }) => {
                             colorMode ? "text-white" : "text-slate-900"
                           }`}
                         >
-                          {student.score}/{student.totalMarks}
+                          {student.obtainMarks}/{student.totalMarks}
                         </td>
 
                         {/* Percentage */}

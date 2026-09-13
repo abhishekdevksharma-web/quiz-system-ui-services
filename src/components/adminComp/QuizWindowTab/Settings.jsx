@@ -46,7 +46,6 @@ function Settings({ colorMode, quiz }) {
         quizId: quiz._id,
       };
       const res = await handleUpdateQuizApi(ReqJsonBody);
-      console.log(res);
 
       if (!res.success) {
         setAlertModal(true);

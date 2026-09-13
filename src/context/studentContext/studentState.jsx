@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import StudentContext from "./studentContext";
 
@@ -14,8 +14,14 @@ function StudentState(props) {
       branch: "",
     },
     answer: [],
+    submittedIn: 0,
     quizDuration: 0,
   });
+  const [viewDevice, setViewDevice] = useState("desktop");
+
+
+  const [studentIsAuth, setStudentIsAuth] = useState(false);
+
   const [colorMode, setcolorMode] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [UserStartQuiz, setUserStartQuiz] = useState(false);
@@ -33,36 +39,11 @@ function StudentState(props) {
   function fetchQuestion() {
     return true;
   }
-  async function fetchQuizDetail(id) {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/student/${id}`);
-    const data1 = await res.json();
-    return data1;
-  }
 
-  async function validateUserAnswer(data) { 
-    
-    try {
-      const responce = await fetch(
-        `${import.meta.env.VITE_API_URL}/student/validateanswer`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        },
-      );
-      const result = await responce.json(); 
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
   return (
     <StudentContext.Provider
       value={{
         fetchQuestion,
-        fetchQuizDetail,
         colorMode,
         setcolorMode,
         questions,
@@ -73,7 +54,6 @@ function StudentState(props) {
         setLoading,
         startQuizLoding,
         setstartQuizLoding,
-        validateUserAnswer,
         userMeta,
         setUserMeta,
         openStudentForm,
@@ -81,6 +61,10 @@ function StudentState(props) {
         isTimerRunning,
         setisTimerRunning,
         timerRef,
+        studentIsAuth,
+        setStudentIsAuth,
+        viewDevice,
+        setViewDevice,
       }}
     >
       {props.children}

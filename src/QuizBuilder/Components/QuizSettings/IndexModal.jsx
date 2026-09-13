@@ -15,8 +15,7 @@ function IndexModal({ onClose, handleSubmit }) {
     autoSubmitOnChromeClose: false,
     autoSubmitOnOtherApp: false,
     autoSubmitOnMinimize: false,
-    fullscreenRequired: false,
-    ignoreResize: true,
+    fullscreenRequired: false, 
   });
 
   const [saveLoading, setSaveLoading] = useState(false);
@@ -43,6 +42,8 @@ function IndexModal({ onClose, handleSubmit }) {
       }));
       setSaveLoading(false);
     }, 1000);
+    console.log(quizMeta);
+    
   };
 
   const handleSaveAndPublice = () => {
@@ -113,10 +114,8 @@ function IndexModal({ onClose, handleSubmit }) {
       </div>
 
       {/* Body */}
-      <div className="flex-1 p-5 space-y-5 overflow-auto">
+      <div className="flex-1 p-5 space-y-5 overflow-y-auto scroll-smooth">  
         <TimeLimitField
-          value={timeLimit}
-          onChange={(value) => setTimeLimit(value)}
           colorMode={colorMode}
         />
 

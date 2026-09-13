@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AdminContext from "./adminContext";
 
 function AdminState(props) {
@@ -11,7 +11,16 @@ function AdminState(props) {
     activeQuizList: [],
   });
 
-  const [question, setQuestion] = useState({ questions: [] });
+  const [questions, setQuestions] = useState([
+    {
+      id: 1,
+      questionText: "",
+      options: ["", ""],
+      correctOptionIndex: null,
+      marks: 1,
+    },
+  ]);
+  const [fileParsedData, setFileParsedData] = useState([]);
 
   //quiz history storing state
   const [adminQuizHistory, setadminQuizHistory] = useState([]);
@@ -28,14 +37,13 @@ function AdminState(props) {
       startTime: "",
       endTime: "",
     },
-    userTimeLimit: 0,
+    userTimeLimit: 30,
     securityCheckType: {
       autoSubmitOnNewTab: false,
       autoSubmitOnChromeClose: false,
       autoSubmitOnOtherApp: false,
       autoSubmitOnMinimize: false,
-      fullscreenRequired: false,
-      ignoreResize: true,
+      fullscreenRequired: false, 
     },
     totalQuestions: 0,
     status: "Closed",
@@ -197,8 +205,6 @@ function AdminState(props) {
   return (
     <AdminContext.Provider
       value={{
-        question,
-        setQuestion,
         fetchRecentQuizes,
         adminQuizHistory,
         setadminQuizHistory,
@@ -220,6 +226,10 @@ function AdminState(props) {
         FetchQuizStudentResults,
         isCheckingToken,
         setIsCheckingToken,
+        questions,
+        setQuestions,
+        fileParsedData,
+        setFileParsedData,
       }}
     >
       {props.children}

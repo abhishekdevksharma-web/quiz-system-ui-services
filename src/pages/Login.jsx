@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import AdminContext from "../context/adminContext/adminContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { colorMode, handleLogin, setIsAuthenticate, IsAuthenticate } =
     useContext(AdminContext);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -23,22 +24,28 @@ const Login = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const redirectTo = localStorage.getItem("redirectPath") || "/";
     setStatus("loading");
     const responce = await handleLogin(formData);
 
     if (responce.status == true) {
       setIsAuthenticate(responce.status);
+
       setStatus("success");
+
       setAlert({
         type: "success",
         message: "Welcome",
       });
+
       setTimeout(() => {
         setStatus("idle");
-        navigate("/admin");
+        navigate(redirectTo, { replace: true });
+        localStorage.removeItem("redirectPath");
       }, 1000);
     } else {
       setStatus("idle");
@@ -48,7 +55,6 @@ const Login = () => {
       });
     }
   };
-
 
   return (
     <div
@@ -212,7 +218,7 @@ const Login = () => {
         <span className="block text-center text-sm text-gray-500 mt-5">
           Don't have an account?{" "}
           <span
-            onClick={() => navigate("/admin/signup", { replace: true })}
+            onClick={() => navigate("/signup", { replace: true })}
             className="ml-1 font-semibold text-blue-600 cursor-pointer hover:text-blue-700 hover:underline transition-colors"
           >
             Sign Up

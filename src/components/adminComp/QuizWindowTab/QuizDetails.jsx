@@ -45,10 +45,7 @@ export default function QuizDetails({ quiz, colorMode }) {
     timeZone: quiz?.timeZone,
     remainingTime: quiz?.remainingTime,
   };
-
-  // console.log(formatDate(quiz.timing.startTime));
-  // console.log(quiz);
-
+ 
   const [quizStatusLoding, setQuizStatusLoding] = useState(false);
   const [quizStatus, setQuizStatus] = useState(data.status);
 
@@ -58,8 +55,7 @@ export default function QuizDetails({ quiz, colorMode }) {
     const responce = await handleUpdateStatus({
       quizId: quiz._id,
       status: data,
-    });
-    console.log(responce);
+    }); 
     
 
     if (responce.status === true) {

@@ -84,7 +84,7 @@ const SignUp = () => {
     } finally {
       setLoading(false);
       setTimeout(() => {
-        navigate("/admin/login");
+        navigate("/login");
       }, 1000);
     }
   };
@@ -290,7 +290,7 @@ const SignUp = () => {
         >
           Already have an account?{" "}
           <span
-            onClick={() => navigate("/admin/login", { replace: true })}
+            onClick={() => navigate("/login", { replace: true })}
             className={
               "font-medium cursor-pointer hover:underline " +
               (colorMode ? "text-indigo-400" : "text-indigo-600")

@@ -1,47 +1,29 @@
-import React, { useState, useMemo, useContext } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React, { useContext, useMemo, useState } from "react";
+import { Outlet } from "react-router-dom";
+
 import Navbar from "../components/adminComp/Navbar";
-import { Outlet, Link } from "react-router-dom";
 import AdminContext from "../context/adminContext/adminContext";
-import { Search } from "lucide-react";
 
 const Admin = () => {
-  const location = useLocation();
-  const { adminQuizHistory, colorMode } = useContext(AdminContext);
-  const [search, setSearch] = useState("");
-
-  const filteredQuizzes = useMemo(() => {
-    const query = search.toLowerCase().trim();
-    if (!query) return adminQuizHistory;
-
-    return adminQuizHistory.filter((quiz) => {
-      return (
-        quiz.name.toLowerCase().includes(query) ||
-        quiz.subject.toLowerCase().includes(query) ||
-        quiz.tag.toLowerCase().includes(query) ||
-        quiz.difficulty.toLowerCase().includes(query)
-      );
-    });
-  }, [search, adminQuizHistory]);
-
-  const hideNavbarRoutes = [
-    "/admin/signup",
-    "/admin/login",
-    "/admin/questionbilder",
-  ];
-
-  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const { colorMode } = useContext(AdminContext);
 
   return (
     <div
-      className={
+      className={`min-h-screen transition-colors duration-300 ${
         colorMode
-          ? "min-h-screen bg-slate-950 text-slate-100"
-          : "min-h-screen bg-slate-100 text-slate-900"
-      }
+          ? "bg-slate-950 text-slate-100"
+          : "bg-slate-100 text-slate-900"
+      }`}
     >
-      {!hideNavbar && <Navbar />}
-      <Outlet />
+      {/* Fixed Navbar */}
+      <Navbar />
+
+      {/* Space reserved for fixed navbar */}
+      <div className="h-16" />
+
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };

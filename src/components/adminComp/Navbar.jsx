@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { ChevronDown } from "lucide-react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import Avatar from "./Avatar";
 import AdminContext from "../../context/adminContext/adminContext";
 import {
@@ -11,11 +11,12 @@ import {
   LayoutDashboard,
   Sparkles,
 } from "lucide-react";
-import { handleLogoutApi } from "../../services/auth.service";
-import AuthAlertModal from "./AlertModal";
+import { handleLogoutApi } from "../../services/auth.service"; 
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { colorMode, setcolorMode, IsAuthenticate, userDetails } =
     useContext(AdminContext);
 
@@ -37,7 +38,7 @@ export default function Navbar() {
   async function handleLogout() {
     const res = await handleLogoutApi();
     if (res.success) {
-      navigate("/admin/login", { replace: true });
+      navigate("/login", { replace: true });
     }
   }
 
@@ -55,9 +56,9 @@ export default function Navbar() {
         <div></div>
         <ul className="hidden md:flex items-center gap-2 relative text-sm font-medium">
           {[
-            { name: "Dashboard", path: "/admin", end: true },
-            { name: "Quizes", path: "/admin/quizes" },
-            { name: "About", path: "/admin/about" },
+            { name: "Dashboard", path: "/", end: true },
+            { name: "Quizes", path: "/quizes" },
+            { name: "About", path: "/about" },
           ].map((item) => (
             <NavLink
               key={item.name}
@@ -275,7 +276,13 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="space-x-2">
-            <Link to="/admin/login" className="flex-1">
+            <Link
+              to="/login"
+              cstate={{
+                from: location,
+              }}
+              className="flex-1"
+            >
               <button
                 className={
                   "cursor-pointer rounded-xl px-4 py-2.5 text-sm font-medium transition " +
@@ -288,7 +295,13 @@ export default function Navbar() {
               </button>
             </Link>
 
-            <Link to="/admin/signup" className="flex-1">
+            <Link
+              to="/signup"
+              state={{
+                from: location,
+              }}
+              className="flex-1"
+            >
               <button
                 className={
                   "cursor-pointer rounded-xl px-4 py-2.5 text-sm font-medium transition border " +
