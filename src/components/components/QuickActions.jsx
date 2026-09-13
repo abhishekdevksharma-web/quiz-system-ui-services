@@ -42,8 +42,8 @@ function QuickActions({ colorMode, confirm }) {
         {/* Create Quiz */}
         <Link
           to="/create-question"
-          target="_blank"
-          rel="noopener noreferrer"
+          // target="_blank"
+          // rel="noopener noreferrer"
           className={`group w-full rounded-2xl border p-3 font-semibold transition-all duration-300 ${
             colorMode
               ? "border-indigo-500 bg-indigo-600/50 text-white hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/25"
