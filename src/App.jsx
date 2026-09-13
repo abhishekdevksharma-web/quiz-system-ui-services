@@ -44,7 +44,7 @@ function App() {
         </Route>
       </Route>
       <Route element={<CreatorProtectedRoute />}>
-        <Route path="/questionbilder" element={<QuestionBuilder />} />
+        <Route path="/create-question" element={<QuestionBuilder />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

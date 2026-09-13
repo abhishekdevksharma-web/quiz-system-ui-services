@@ -41,7 +41,7 @@ function QuickActions({ colorMode, confirm }) {
       <div className="flex flex-col gap-3 text-sm">
         {/* Create Quiz */}
         <Link
-          to="/questionbilder"
+          to="/create-question"
           target="_blank"
           rel="noopener noreferrer"
           className={`group w-full rounded-2xl border p-3 font-semibold transition-all duration-300 ${
